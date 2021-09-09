@@ -1,6 +1,8 @@
 ## Coalition Technologies - Laravel Developer
 
 ----------
+Developer/Author: Esmatullah Arifi (<a href="mailto:esmatullaharifi@gmail.com">esmatullaharifi@gmail.com</a> | <a href="fb.com/esmatullaharifi.official">Facebook</a>)
+
 # Getting started
 
 ## Installation
@@ -32,8 +34,6 @@ Generate a new application key
 Run the database migration to create the required tables in the database
 
     php artisan migrate
-
-Developer/Author: Esmatullah Arifi (<a href="mailto:esmatullaharifi@gmail.com">esmatullaharifi@gmail.com</a> | <a href="fb.com/esmatullaharifi.official">Facebook</a>)
 
 ## Technologies Used
 
