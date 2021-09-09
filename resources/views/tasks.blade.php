@@ -30,7 +30,20 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    You can change the priorities by drag and drop the tasks.
+                    Filter By Project:<br/>
+                    <div style="padding-bottom: 15px;">
+                        <select id="project_id" onchange="filterTasksByProject(this)" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <option value="0">All</option>
+                            @foreach($projects as $project)
+                                <option value="{{ $project->id }}" @if($project->id == old('project_id')) selected @endif>{{ $project->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <div class="pb-6">
+                        You can change the priorities by drag and drop the tasks.
+                    </div>
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                         <tr>
@@ -50,7 +63,7 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200" id="table-items">
                         @foreach($tasks as $key => $task)
-                            <tr data-id="{{ $task->id }}">
+                            <tr data-id="{{ $task->id }}" data-project="{{ $task->project_id }}">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     {{ $key + 1 }}
                                 </td>
@@ -81,6 +94,25 @@
         </div>
     </div>
     <script>
+        function filterTasksByProject(element) {
+            let projectId = element.value;
+            let tasks = document.getElementById('table-items').children;
+            [].forEach.call(tasks, (row) => {
+                //In case All Project option is selected then we will remove the hidden attr from all of the tasks
+                if (projectId === 0) {
+                    row.removeAttribute('hidden');
+                } else {
+                    //In case specific project is selected, then we will remove the hidden attr from corresponding tasks
+                    // and add the hidden field to rest of the tasks
+                    if (row.getAttribute('data-project') === projectId.toString()) {
+                        row.removeAttribute('hidden');
+                    } else {
+                        row.setAttribute('hidden', 'hidden');
+                    }
+                }
+            });
+        }
+
         const tableItems = document.getElementById('table-items');
         // Sortable is a function from SortableJS library and used for drag and drop sorting here
         new Sortable(tableItems, {
@@ -91,6 +123,8 @@
                 // After each drag and drop we will send the new priority and the task id to the server for storage
                 fetch('{{ route('tasks.changePriorities') }}', {
                     method: 'POST',
+                    //We set these headers to attach CSRF token with the request as the request is POST
+                    // and also to set the content type header
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
                         'Content-Type': 'application/json'
@@ -107,7 +141,6 @@
                 set: function (tasks) {
                     //Using this section we will change the priority numbers as drag and drop is done.
                     let tableRows = tasks.el.children;
-                    console.log(tableRows);
                     [].forEach.call(tableRows, (row, index) => {
                         row.cells[0].innerText = index + 1;
                     });

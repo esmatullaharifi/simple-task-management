@@ -17,11 +17,12 @@ class TaskController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\View
     {
+        $projects = Project::all();
         $tasks = Task::with([
             'project'
         ])->orderBy('priority')->get();
 
-        return view('tasks', compact('tasks'));
+        return view('tasks', compact('tasks', 'projects'));
     }
 
     /**
