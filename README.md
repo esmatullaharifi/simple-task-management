@@ -1,4 +1,4 @@
-## Coalition Technologies - Laravel Developer
+## Simple Task Management App (Build for a job test)
 
 ----------
 Developer/Author: Esmatullah Arifi (<a href="mailto:esmatullaharifi@gmail.com">esmatullaharifi@gmail.com</a> | <a href="fb.com/esmatullaharifi.official">Facebook</a>)
@@ -11,7 +11,7 @@ Please check the official laravel installation guide for server requirements bef
 
 Switch to the repo folder
 
-    cd coalition-test
+    cd simple-task-management
 
 Install all the dependencies using composer
 
